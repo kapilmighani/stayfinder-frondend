@@ -39,7 +39,7 @@ function Booking() {
     };
 
     try {
-      const response = await fetch("http://localhost:8000/bookings", {
+      const response = await fetch("https://stayfinder-backend-trrx.onrender.com/bookings", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
