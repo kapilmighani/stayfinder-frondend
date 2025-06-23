@@ -9,7 +9,7 @@ function Booking() {
   const [guests, setGuests] = useState(1);
   const navigate = useNavigate();
   useEffect(() => {
-    fetch(`http://localhost:8000/listing/${listingId}`)
+    fetch(`https://stayfinder-backend-trrx.onrender.com/listing/${listingId}`)
       .then((res) => res.json())
       .then((data) => setListing(data.listing))
       .catch((err) => console.error("Failed to load listing:", err));
