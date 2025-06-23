@@ -13,7 +13,7 @@ function ListingDetail() {
   const mapContainerRef = useRef(null);
 
   useEffect(() => {
-    fetch(`http://localhost:8000/listing/${id}`)
+    fetch(`https://stayfinder-backend-trrx.onrender.com/listing/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setListing(data.listing);
