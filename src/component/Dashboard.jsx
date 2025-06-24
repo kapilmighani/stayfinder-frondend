@@ -1,15 +1,11 @@
 import { useEffect, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 function Dashboard() {
   const [listings, setListings] = useState([]);
   const navigate = useNavigate();
   const { role } = useAuth();
-
-  if (role !== "host") {
-    return <Navigate to="/unauthorized" />;
-  }
 
   useEffect(() => {
     fetch("https://stayfinder-backend-trrx.onrender.com/mylisting", {
@@ -22,7 +18,8 @@ function Dashboard() {
       .then((res) => res.json())
       .then((data) => {
         if (data.message === "Unauthorized: No token") {
-          navigate("/unauthorized");
+          console.warn("Unauthorized access");
+          // 🔴 No redirect now
         } else {
           setListings(data.listings);
         }
