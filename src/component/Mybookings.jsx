@@ -5,17 +5,17 @@ function MyBookings() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("token"); // 🛡️ get token from localStorage
+    const token = localStorage.getItem("token");
 
     if (!token) {
       setLoading(false);
       return;
     }
 
-    fetch("http://localhost:8000/mybookings", {
+    fetch("https://stayfinder-backend-trrx.onrender.com/mybookings", {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${token}`, // 🛡️ send token in header
+        Authorization: `Bearer ${token}`, 
         "Content-Type": "application/json",
       },
     })
