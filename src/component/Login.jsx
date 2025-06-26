@@ -28,7 +28,7 @@ function Login() {
     console.log("hello");
 
     try {
-      const res = await fetch("https://stayfinder-backend-trrx.onrender.com/login", {
+      const res = await fetch("https:///login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
