@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
@@ -12,6 +12,12 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { setIsLoggedIn, setRole } = useAuth();
+
+  // 🔍 Debug: Print token if already saved
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    console.log("🔍 Existing token in localStorage:", token);
+  }, []);
 
   const handleChange = (e) => {
     setFormData({
@@ -35,14 +41,18 @@ function Login() {
       });
 
       const data = await res.json();
+      console.log("✅ Response from server:", data);
 
       if (!res.ok || !data.success) {
         throw new Error(data.message || "Login failed");
       }
 
-      // ✅ Save token safely (only if exists)
+      // ✅ Save token in localStorage
       if (data.token) {
         localStorage.setItem("token", data.token);
+        console.log("📦 Token stored in localStorage:", data.token);
+      } else {
+        console.warn("⚠️ No token received from backend");
       }
 
       setIsLoggedIn(true);
@@ -93,7 +103,9 @@ function Login() {
           type="submit"
           disabled={loading}
           className={`w-full text-white py-2 rounded ${
-            loading ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+            loading
+              ? "bg-blue-400 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700"
           }`}
         >
           {loading ? "Logging in..." : "Login"}
