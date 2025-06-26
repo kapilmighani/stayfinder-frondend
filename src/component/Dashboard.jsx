@@ -7,18 +7,16 @@ function Dashboard() {
   const navigate = useNavigate();
   const { role } = useAuth();
 
-  // 🚫 If not host, redirect
   if (role !== "host") {
     return <Navigate to="/unauthorized" />;
   }
 
-  // ✅ Get My Listings (with token)
   useEffect(() => {
     fetch("https://stayfinder-backend-trrx.onrender.com/mylisting", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("token"), // ✅ Crypto token auth
+        Authorization: "Bearer " + localStorage.getItem("token"),
       },
     })
       .then((res) => res.json())
@@ -38,7 +36,7 @@ function Dashboard() {
       const res = await fetch(`https://stayfinder-backend-trrx.onrender.com/deletelisting/${id}`, {
         method: "DELETE",
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"), // ✅ Token for delete too
+          Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
 
