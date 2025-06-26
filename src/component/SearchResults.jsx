@@ -12,7 +12,7 @@ function SearchResults() {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await fetch(`http://localhost:8000/search${search}`, {
+        const res = await fetch(`https://stayfinder-backend-trrx.onrender.com/search${search}`, {
           headers: token
             ? {
                 "Content-Type": "application/json",
