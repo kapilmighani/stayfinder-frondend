@@ -15,9 +15,9 @@ function ListingDetail() {
   useEffect(() => {
     const fetchListing = async () => {
       try {
-        const token = localStorage.getItem("token"); // 🛡️ Crypto token fetch
+        const token = localStorage.getItem("token");
 
-        const res = await fetch(`http://localhost:8000/listing/${id}`, {
+        const res = await fetch(`https://stayfinder-backend-trrx.onrender.com/listing/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
