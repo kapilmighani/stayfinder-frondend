@@ -13,12 +13,6 @@ function Login() {
   const navigate = useNavigate();
   const { setIsLoggedIn, setRole } = useAuth();
 
-  // 🔍 Debug: Print token if already saved
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    console.log("🔍 Existing token in localStorage:", token);
-  }, []);
-
   const handleChange = (e) => {
     setFormData({
       ...formData,
