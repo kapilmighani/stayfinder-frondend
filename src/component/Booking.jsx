@@ -9,7 +9,6 @@ function Booking() {
   const [guests, setGuests] = useState(1);
   const navigate = useNavigate();
 
-  // ✅ Fetch listing data
   useEffect(() => {
     fetch(`https://stayfinder-backend-trrx.onrender.com/listing/${listingId}`)
       .then((res) => res.json())
@@ -17,7 +16,6 @@ function Booking() {
       .catch((err) => console.error("Failed to load listing:", err));
   }, [listingId]);
 
-  // ✅ Calculate total price
   const calculateTotal = () => {
     if (!checkIn || !checkOut || !listing?.price || guests < 1) return 0;
 
@@ -28,7 +26,6 @@ function Booking() {
     return diffDays > 0 ? diffDays * listing.price * guests : 0;
   };
 
-  // ✅ Handle booking submit
   const handleBooking = async (e) => {
     e.preventDefault();
     const totalPrice = calculateTotal();
@@ -46,7 +43,7 @@ function Booking() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"), // ✅ crypto token header
+          Authorization: "Bearer " + localStorage.getItem("token"),
         },
         body: JSON.stringify(bookingData),
       });
