@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN; ;
+mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
 function ListingDetail() {
   const { id } = useParams();
@@ -13,19 +13,37 @@ function ListingDetail() {
   const mapContainerRef = useRef(null);
 
   useEffect(() => {
-    fetch(`https://stayfinder-backend-trrx.onrender.com/listing/${id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setListing(data.listing);
-        setLoading(false);
-      })
-      .catch((err) => {
+    const fetchListing = async () => {
+      try {
+        const token = localStorage.getItem("token"); // 🛡️ Crypto token fetch
+
+        const res = await fetch(`http://localhost:8000/listing/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          credentials: "include",
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          navigate("/unauthorized");
+        } else {
+          setListing(data.listing);
+        }
+      } catch (err) {
         console.error("Failed to fetch listing:", err);
+      } finally {
         setLoading(false);
-      });
-  }, [id]);
+      }
+    };
+
+    fetchListing();
+  }, [id, navigate]);
 
   useEffect(() => {
+    let map;
+
     if (listing && listing.location) {
       fetch(
         `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
@@ -37,7 +55,7 @@ function ListingDetail() {
           if (data.features && data.features.length > 0) {
             const [lng, lat] = data.features[0].center;
 
-            const map = new mapboxgl.Map({
+            map = new mapboxgl.Map({
               container: mapContainerRef.current,
               style: "mapbox://styles/mapbox/streets-v11",
               center: [lng, lat],
@@ -45,12 +63,14 @@ function ListingDetail() {
             });
 
             new mapboxgl.Marker().setLngLat([lng, lat]).addTo(map);
-
-            return () => map.remove();
           }
         })
         .catch((err) => console.error("Geocoding failed:", err));
     }
+
+    return () => {
+      if (map) map.remove();
+    };
   }, [listing]);
 
   if (loading) return <div>Loading...</div>;
@@ -58,7 +78,6 @@ function ListingDetail() {
 
   return (
     <div className="p-4 max-w-4xl mx-auto">
-
       <h1 className="text-3xl font-bold mb-4">{listing.title}</h1>
       <img
         src={listing.image}

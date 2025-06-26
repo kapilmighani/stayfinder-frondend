@@ -5,13 +5,22 @@ function MyBookings() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://stayfinder-backend-trrx.onrender.com/mybookings", {
+    const token = localStorage.getItem("token"); // 🛡️ get token from localStorage
+
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+
+    fetch("http://localhost:8000/mybookings", {
       method: "GET",
-      credentials: "include",
+      headers: {
+        Authorization: `Bearer ${token}`, // 🛡️ send token in header
+        "Content-Type": "application/json",
+      },
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("Fetched bookings:", data);
         setBookings(data.bookings || []);
         setLoading(false);
       })
@@ -38,7 +47,9 @@ function MyBookings() {
           className="w-32 h-32 mb-4 opacity-60"
         />
         <p className="text-lg font-medium">No bookings found yet</p>
-        <p className="text-sm text-gray-500">Start exploring and book your next stay!</p>
+        <p className="text-sm text-gray-500">
+          Start exploring and book your next stay!
+        </p>
       </div>
     );
   }

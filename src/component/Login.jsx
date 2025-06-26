@@ -21,13 +21,14 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setMessage("");
+
     try {
       const res = await fetch("https://stayfinder-backend-trrx.onrender.com/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include",
         body: JSON.stringify(formData),
       });
 
@@ -37,13 +38,16 @@ function Login() {
         throw new Error(data.message || "Login failed");
       }
 
+      // ✅ Save JWT token in localStorage
+      localStorage.setItem("token", data.token);
+
       setIsLoggedIn(true);
       setRole(data.role || "");
 
       alert("Login successful!");
       navigate("/");
     } catch (err) {
-      alert(err.message);
+      setMessage(err.message);
     }
   };
 

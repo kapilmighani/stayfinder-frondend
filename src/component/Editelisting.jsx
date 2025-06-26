@@ -14,8 +14,13 @@ function Editlisting() {
     category: "",
   });
 
+  // ✅ Fetch listing with token
   useEffect(() => {
-    fetch(`https://stayfinder-backend-trrx.onrender.com/listing/${id}`)
+    fetch(`http://localhost:8000/listing/${id}`, {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    })
       .then((res) => res.json())
       .then((data) => setForm(data.listing))
       .catch((err) => console.error("Fetch error:", err));
@@ -25,14 +30,17 @@ function Editlisting() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // ✅ Submit updated listing with token
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const res = await fetch(`https://stayfinder-backend-trrx.onrender.com/updatelisting/${id}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
       body: JSON.stringify(form),
-      credentials: "include"
     });
 
     if (res.ok) {

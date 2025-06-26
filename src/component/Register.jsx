@@ -30,7 +30,6 @@ function Register() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
-        credentials: "include",
       });
 
       const result = await response.json();
@@ -38,6 +37,11 @@ function Register() {
       if (response.ok && result.success) {
         setIsSuccess(true);
         setMessage("User registered successfully!");
+
+        // ✅ Save token in localStorage (crypto-style)
+        if (result.token) {
+          localStorage.setItem("token", result.token);
+        }
 
         setIsLoggedIn(true);
         setRole(result.role || "");

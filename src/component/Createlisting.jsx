@@ -41,8 +41,10 @@ function Createlisting() {
     try {
       const res = await fetch("https://stayfinder-backend-trrx.onrender.com/createlisting", {
         method: "POST",
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"), // ✅ crypto token header
+        },
         body: form,
-        credentials: "include",
       });
 
       const data = await res.json();

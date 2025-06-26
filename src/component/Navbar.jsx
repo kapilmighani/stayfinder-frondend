@@ -13,10 +13,18 @@ function Navbar() {
   if (loading) return null;
 
   const handleLogout = async () => {
-    await fetch("https://stayfinder-backend-trrx.onrender.com/logout", {
-      method: "GET",
-      credentials: "include",
-    });
+    // Clear token from localStorage (crypto-based auth)
+    localStorage.removeItem("token");
+
+    // Optional: Inform backend
+    try {
+      await fetch("http://localhost:8000/logout", {
+        method: "GET",
+      });
+    } catch (err) {
+      console.warn("Logout error:", err);
+    }
+
     setIsLoggedIn(false);
     setRole("");
     navigate("/");
@@ -85,12 +93,8 @@ function Navbar() {
 
           {isLoggedIn && role === "host" && (
             <>
-              <Link to="/host/dashboard" className="text-gray-700 hover:text-blue-600">
-                Dashboard
-              </Link>
-              <Link to="/host/create" className="text-gray-700 hover:text-green-600">
-                Add Listing
-              </Link>
+              <Link to="/host/dashboard" className="text-gray-700 hover:text-blue-600">Dashboard</Link>
+              <Link to="/host/create" className="text-gray-700 hover:text-green-600">Add Listing</Link>
             </>
           )}
 
@@ -140,26 +144,18 @@ function Navbar() {
             </button>
           </form>
 
-          <Link to="/cart" onClick={() => setMenuOpen(false)} className="text-gray-700 hover:text-blue-600 block">
-            Cart
-          </Link>
+          <Link to="/cart" onClick={() => setMenuOpen(false)} className="text-gray-700 hover:text-blue-600 block">Cart</Link>
 
           {isLoggedIn && role === "host" && (
             <>
-              <Link to="/host/dashboard" onClick={() => setMenuOpen(false)} className="text-gray-700 hover:text-blue-600 block">
-                Dashboard
-              </Link>
-              <Link to="/host/create" onClick={() => setMenuOpen(false)} className="text-gray-700 hover:text-green-600 block">
-                Add Listing
-              </Link>
+              <Link to="/host/dashboard" onClick={() => setMenuOpen(false)} className="text-gray-700 hover:text-blue-600 block">Dashboard</Link>
+              <Link to="/host/create" onClick={() => setMenuOpen(false)} className="text-gray-700 hover:text-green-600 block">Add Listing</Link>
             </>
           )}
 
           {isLoggedIn ? (
             <>
-              <Link to="/mybookings" onClick={() => setMenuOpen(false)} className="text-gray-700 hover:text-blue-600 block">
-                Bookings
-              </Link>
+              <Link to="/mybookings" onClick={() => setMenuOpen(false)} className="text-gray-700 hover:text-blue-600 block">Bookings</Link>
               <button
                 onClick={() => {
                   handleLogout();
@@ -172,12 +168,8 @@ function Navbar() {
             </>
           ) : (
             <>
-              <Link to="/register" onClick={() => setMenuOpen(false)} className="text-gray-700 hover:text-blue-600 block">
-                Register
-              </Link>
-              <Link to="/login" onClick={() => setMenuOpen(false)} className="text-gray-700 hover:text-blue-600 block">
-                Login
-              </Link>
+              <Link to="/register" onClick={() => setMenuOpen(false)} className="text-gray-700 hover:text-blue-600 block">Register</Link>
+              <Link to="/login" onClick={() => setMenuOpen(false)} className="text-gray-700 hover:text-blue-600 block">Login</Link>
             </>
           )}
         </div>
