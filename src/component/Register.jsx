@@ -38,7 +38,6 @@ function Register() {
         setIsSuccess(true);
         setMessage("User registered successfully!");
 
-        // ✅ Save token in localStorage (crypto-style)
         if (result.token) {
           localStorage.setItem("token", result.token);
         }
