@@ -24,6 +24,7 @@ function Login() {
     e.preventDefault();
     setMessage("");
     setLoading(true);
+    console.log("hello");
 
     try {
       const res = await fetch("https://stayfinder-backend-trrx.onrender.com/login", {
