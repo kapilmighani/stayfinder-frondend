@@ -14,9 +14,8 @@ function Editlisting() {
     category: "",
   });
 
-  // ✅ Fetch listing with token
   useEffect(() => {
-    fetch(`http://localhost:8000/listing/${id}`, {
+    fetch(`https://stayfinder-backend-trrx.onrender.com/listing/${id}`, {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
@@ -30,7 +29,6 @@ function Editlisting() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // ✅ Submit updated listing with token
   const handleSubmit = async (e) => {
     e.preventDefault();
 
