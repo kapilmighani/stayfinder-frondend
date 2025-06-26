@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       try {
-        const res = await fetch("http://localhost:8000/check-auth", {
+        const res = await fetch("https://stayfinder-backend-trrx.onrender.com/check-auth", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -30,17 +30,20 @@ export const AuthProvider = ({ children }) => {
 
         if (res.ok && data.authenticated) {
           setIsLoggedIn(true);
-          setRole(data.role);
+          setRole(data.role || "");
+          localStorage.setItem("role", data.role || "");
         } else {
           setIsLoggedIn(false);
           setRole("");
-          localStorage.removeItem("token"); // Clean up expired token
+          localStorage.removeItem("token");
+          localStorage.removeItem("role");
         }
       } catch (err) {
-        console.error("Auth check failed:", err);
+        console.error("Auth check failed:", err.message);
         setIsLoggedIn(false);
         setRole("");
         localStorage.removeItem("token");
+        localStorage.removeItem("role");
       } finally {
         setLoading(false);
       }
