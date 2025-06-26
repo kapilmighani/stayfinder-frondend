@@ -9,6 +9,7 @@ function Login() {
   });
 
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { setIsLoggedIn, setRole } = useAuth();
 
@@ -22,6 +23,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
+    setLoading(true);
 
     try {
       const res = await fetch("https://stayfinder-backend-trrx.onrender.com/login", {
@@ -38,8 +40,10 @@ function Login() {
         throw new Error(data.message || "Login failed");
       }
 
-      // ✅ Save JWT token in localStorage
-      localStorage.setItem("token", data.token);
+      // ✅ Save token safely (only if exists)
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+      }
 
       setIsLoggedIn(true);
       setRole(data.role || "");
@@ -47,7 +51,9 @@ function Login() {
       alert("Login successful!");
       navigate("/");
     } catch (err) {
-      setMessage(err.message);
+      setMessage(err.message || "Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -59,7 +65,9 @@ function Login() {
       >
         <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
 
-        {message && <p className="mb-4 text-center text-red-500">{message}</p>}
+        {message && (
+          <p className="mb-4 text-center text-red-500">{message}</p>
+        )}
 
         <input
           type="text"
@@ -83,9 +91,12 @@ function Login() {
 
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+          disabled={loading}
+          className={`w-full text-white py-2 rounded ${
+            loading ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+          }`}
         >
-          Login
+          {loading ? "Logging in..." : "Login"}
         </button>
       </form>
     </div>
