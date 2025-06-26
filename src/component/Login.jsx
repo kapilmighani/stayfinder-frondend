@@ -33,13 +33,16 @@ function Login() {
         },
         body: JSON.stringify(formData),
       });
+      console.log("hell");
 
       const data = await res.json();
       console.log("✅ Response from server:", data);
+      console.log("he");
 
       if (!res.ok || !data.success) {
         throw new Error(data.message || "Login failed");
       }
+      console.log("e");
 
       // ✅ Save token in localStorage
       if (data.token) {
