@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
@@ -21,32 +21,29 @@ function Login() {
   };
 
   const handleSubmit = async (e) => {
-    console.log("tt");
     e.preventDefault();
     setMessage("");
     setLoading(true);
-    console.log("hello");
 
     try {
-      const res = await fetch("https:///login", {
+      // ✅ Replace this with your actual backend URL (hosted on Render)
+      const res = await fetch("https://stayfinder-backend-trrx.onrender.com/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
+        credentials: "include", // 👈 if you're using cookie-based auth
       });
-      console.log("hell");
 
       const data = await res.json();
       console.log("✅ Response from server:", data);
-      console.log("he");
 
       if (!res.ok || !data.success) {
         throw new Error(data.message || "Login failed");
       }
-      console.log("e");
 
-      // ✅ Save token in localStorage
+      // ✅ Save token in localStorage (only if your backend sends token)
       if (data.token) {
         localStorage.setItem("token", data.token);
         console.log("📦 Token stored in localStorage:", data.token);
@@ -60,6 +57,7 @@ function Login() {
       alert("Login successful!");
       navigate("/");
     } catch (err) {
+      console.error("❌ Login error:", err.message);
       setMessage(err.message || "Something went wrong");
     } finally {
       setLoading(false);
