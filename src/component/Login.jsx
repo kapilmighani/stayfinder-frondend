@@ -26,29 +26,25 @@ function Login() {
     setLoading(true);
 
     try {
-      // ✅ Replace this with your actual backend URL (hosted on Render)
       const res = await fetch("https://stayfinder-backend-trrx.onrender.com/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
-        credentials: "include", // 👈 if you're using cookie-based auth
       });
 
       const data = await res.json();
-      console.log("✅ Response from server:", data);
 
       if (!res.ok || !data.success) {
         throw new Error(data.message || "Login failed");
       }
 
-      // ✅ Save token in localStorage (only if your backend sends token)
       if (data.token) {
         localStorage.setItem("token", data.token);
-        console.log("📦 Token stored in localStorage:", data.token);
+        localStorage.setItem("role", data.role || "");
       } else {
-        console.warn("⚠️ No token received from backend");
+        console.warn("No token received from backend");
       }
 
       setIsLoggedIn(true);
