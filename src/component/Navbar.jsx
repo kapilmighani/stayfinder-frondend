@@ -13,16 +13,15 @@ function Navbar() {
   if (loading) return null;
 
   const handleLogout = async () => {
-    // Clear token from localStorage (crypto-based auth)
     localStorage.removeItem("token");
-
-    // Optional: Inform backend
+    localStorage.removeItem("role");
     try {
-      await fetch("http://localhost:8000/logout", {
+      await fetch("https://stayfinder-backend-trrx.onrender.com/logout", {
         method: "GET",
+        credentials: "include",
       });
     } catch (err) {
-      console.warn("Logout error:", err);
+      console.warn("Logout error:", err.message);
     }
 
     setIsLoggedIn(false);
