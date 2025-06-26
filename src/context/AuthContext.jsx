@@ -19,16 +19,11 @@ export const AuthProvider = ({ children }) => {
       }
 
       try {
-<<<<<<< HEAD
-        const res = await fetch("https://stayfinder-backend-trrx.onrender.com/check-auth", {
-          credentials: "include",
-=======
         const res = await fetch("http://localhost:8000/check-auth", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
           },
->>>>>>> 13a6fdf (add crypto)
         });
 
         const data = await res.json();
